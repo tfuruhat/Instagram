@@ -35,7 +35,7 @@ class PostData: NSObject
         let time = valueDictionary["time"] as? String
         self.date = Date(timeIntervalSinceReferenceDate: TimeInterval(time!)!)
         
-        if let likes = valueDictionary["Likes"] as? [String]
+        if let likes = valueDictionary["likes"] as? [String]
         {
             self.likes = likes
         }
