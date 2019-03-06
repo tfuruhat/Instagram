@@ -16,6 +16,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var tableView: UITableView!
     
     var postArray: [PostData] = []
+
     // DatabaseのObserveEventの登録状態を表す
     var observing = false
     
@@ -53,7 +54,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 postsRef.observe(.childAdded, with:
                 {
                     snapshot in
-                    print("DEBUG_PRINT: .childAddedイベントが発生しました。")
+                    print("DEBUG_PRINT1: .childAddedイベントが発生しました。")
                     
                     // PostDataクラスを生成して受け取ったデータを設定する
                     if let uid = Auth.auth().currentUser?.uid
@@ -69,7 +70,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 postsRef.observe(.childChanged, with:
                 {
                     snapshot in
-                    print("DEBUG_PRINT: .childChangedイベントが発生しました。")
+                    print("DEBUG_PRINT2: .childChangedイベントが発生しました。")
                     
                     if let uid = Auth.auth().currentUser?.uid
                     {
@@ -128,9 +129,27 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         // セル内のボタンのアクションをソースコードで設定する
         cell.likeButton.addTarget(self, action: #selector(handleButton(_:forEvent:)), for: .touchUpInside)
+        // 課題：セル内のボタンのアクションをソースコードで設定する
+        cell.commentButton.addTarget(self, action: #selector(commentButton(_:forEvent:)), for: .touchUpInside)
+        
         return cell
     }
-    
+ 
+    // セル内のボタンがタップされた時に呼ばれるメソッド
+    @objc func commentButton(_ sender: UIButton, forEvent event: UIEvent)
+    {
+        print("DEBUG_PRINT: Commentボタンがタップされました。")
+        // タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = tableView.indexPathForRow(at: point)
+        
+        // 配列からタップされたインデックスのデータを取り出す
+        let postData = postArray[indexPath!.row]
+        let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment") as! CommentViewController
+        commentViewController.postData = postData
+        self.present(commentViewController, animated: true, completion: nil)
+    }
     // セル内のボタンがタップされた時に呼ばれるメソッド
     @objc func handleButton(_ sender: UIButton, forEvent event: UIEvent)
     {

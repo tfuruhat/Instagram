@@ -20,6 +20,9 @@ class PostData: NSObject
     var date: Date?
     var likes: [String] = []
     var isLiked: Bool = false
+    //課題
+    var comment_name: String?
+    var comment: String?
     
     init(snapshot: DataSnapshot, myId: String)
     {
@@ -27,13 +30,19 @@ class PostData: NSObject
         let valueDictionary = snapshot.value as! [String: Any]
         
         imageString = valueDictionary["image"] as? String
-        image = UIImage(data: Data(base64Encoded: imageString!, options: .ignoreUnknownCharacters)!)
+        if imageString != nil
+        {
+            image = UIImage(data: Data(base64Encoded: imageString!, options: .ignoreUnknownCharacters)!)
+        }
         
         self.name = valueDictionary["name"] as? String
         self.caption = valueDictionary["caption"] as? String
         
         let time = valueDictionary["time"] as? String
-        self.date = Date(timeIntervalSinceReferenceDate: TimeInterval(time!)!)
+        if time != nil
+        {
+            self.date = Date(timeIntervalSinceReferenceDate: TimeInterval(time!)!)
+        }
         
         if let likes = valueDictionary["likes"] as? [String]
         {
@@ -48,5 +57,9 @@ class PostData: NSObject
                 break
             }
         }
+        //課題
+        self.comment_name = valueDictionary["comment_name"] as? String
+        self.comment = valueDictionary["comment"] as? String
+
     }
 }
