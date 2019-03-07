@@ -104,8 +104,8 @@
 				55502190222BA9DC000C73B6 /* PostTableViewCell.swift */,
 				55502191222BA9DC000C73B6 /* PostTableViewCell.xib */,
 				5555F6E3222EAE71006A5738 /* CommentViewController.swift */,
-				555EA669222830A10017C016 /* HomeViewController.swift */,
 				555EA66B222830B00017C016 /* ImageViewController.swift */,
+				555EA669222830A10017C016 /* HomeViewController.swift */,
 				555EA66D222830BF0017C016 /* PostViewController.swift */,
 				555EA66F222830D50017C016 /* SettingViewController.swift */,
 			);

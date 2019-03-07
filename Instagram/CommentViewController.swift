@@ -14,7 +14,7 @@ import SVProgressHUD
 class CommentViewController: UIViewController {
 
     @IBOutlet weak var textField: UITextField!
- 
+
     //コメントボタン押されたセルの情報
     var postData: PostData?
     
