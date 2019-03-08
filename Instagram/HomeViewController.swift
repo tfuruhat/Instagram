@@ -143,12 +143,52 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let touch = event.allTouches?.first
         let point = touch!.location(in: self.tableView)
         let indexPath = tableView.indexPathForRow(at: point)
-        
+   
         // 配列からタップされたインデックスのデータを取り出す
         let postData = postArray[indexPath!.row]
-        let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment") as! CommentViewController
-        commentViewController.postData = postData
-        self.present(commentViewController, animated: true, completion: nil)
+
+        var alertTextField: UITextField?
+        let alert = UIAlertController(
+            title: "コメント",
+            message: "コメントを入力してください",
+            preferredStyle: UIAlertController.Style.alert)
+            alert.addTextField(configurationHandler: {(textField: UITextField!) in
+            alertTextField = textField
+            //textField.text = postData.comment
+        })
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel,handler: nil))
+        alert.addAction(UIAlertAction(title: "投稿", style: UIAlertAction.Style.default)
+        {
+            _ in
+            if let text = alertTextField?.text
+            {
+                // PostDataに必要な情報を取得しておく
+                let user_name = Auth.auth().currentUser?.displayName
+                //postData?.comment = textField.text!
+                postData.comment_name = user_name!
+                var commentAll = postData.comment
+                if postData.comment == nil
+                {
+                    // 初回コメント
+                    commentAll = text
+                }
+                else
+                {
+                    // 二回目以降のコメント
+                    commentAll = postData.comment! + "\n" + postData.comment_name! + ": " + text
+                }
+                // 辞書を作成してFirebaseに保存する
+                let postRef = Database.database().reference().child(Const.PostPath).child(postData.id!)
+                let postDic = ["comment": commentAll, "comment_name": postData.comment_name]
+                postRef.updateChildValues(postDic as [AnyHashable : Any])
+            }
+        })
+        self.present(alert, animated: true, completion: nil)
+        // 配列からタップされたインデックスのデータを取り出す
+        //let postData = postArray[indexPath!.row]
+        //let commentViewController = self.storyboard?.instantiateViewController(withIdentifier: "Comment") as! CommentViewController
+        //commentViewController.postData = postData
+        //self.present(commentViewController, animated: true, completion: nil)
     }
     // セル内のボタンがタップされた時に呼ばれるメソッド
     @objc func handleButton(_ sender: UIButton, forEvent event: UIEvent)

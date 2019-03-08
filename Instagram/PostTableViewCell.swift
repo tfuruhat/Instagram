@@ -66,7 +66,7 @@ class PostTableViewCell: UITableViewCell
         {
             print("setPostData: \(postData.comment_name!)")
             print("setPostData: \(postData.comment!)")
-            self.commentLabel.text = "\(postData.comment_name!) : \(postData.comment!)"
+            self.commentLabel.text = "\(postData.comment_name!): \(postData.comment!)"
         }
         else
         {
